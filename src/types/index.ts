@@ -53,3 +53,39 @@ export interface AnalyzeAction {
   type: AnalyzeActionType;
   payload?: any;
 }
+
+export type AnalysisCategory = {
+  id: string;
+  title: { en: string; fa: string };
+  subcategories: AnalysisSubcategory[];
+};
+
+type AnalysisSubcategory = {
+  id: string;
+  title: { en: string; fa: string };
+  tests: AnalysisTest[];
+};
+
+export type Tests =
+  | "single"
+  | "paired"
+  | "multiple"
+  | "timeSeries"
+  | "matrix"
+  | "correlation"
+  | "anova"
+  | "two-independent"
+  | "multi-group"
+  | "multi-variable"
+  | "categorical";
+
+type AnalysisTest = {
+  id: string;
+  title: { en: string; fa: string };
+  dataRequirements: {
+    type: Tests;
+    minSamples: number;
+    maxSamples?: number;
+    groups?: number;
+  };
+};

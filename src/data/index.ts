@@ -1,3 +1,5 @@
+import { AnalysisCategory } from "@/types";
+
 export const homeContent = {
   en: {
     nav: {
@@ -196,6 +198,210 @@ export const statiscalTabs = {
     },
   },
 };
+
+export const statisticalTests: AnalysisCategory[] = [
+  {
+    id: "descriptive",
+    title: { en: "Descriptive Analysis", fa: "تحلیل توصیفی" },
+    subcategories: [
+      {
+        id: "central-tendency",
+        title: { en: "Central Tendency", fa: "شاخص‌های مرکزی" },
+        tests: [
+          {
+            id: "mean-median-mode",
+            title: { en: "Mean, Median, Mode", fa: "میانگین، میانه، مد" },
+            dataRequirements: { type: "single", minSamples: 1 },
+          },
+        ],
+      },
+      // اضافه شده: شاخص‌های پراکندگی
+      {
+        id: "dispersion",
+        title: { en: "Dispersion Measures", fa: "شاخص‌های پراکندگی" },
+        tests: [
+          {
+            id: "variance-std",
+            title: { en: "Variance, Standard Deviation", fa: "واریانس، انحراف معیار" },
+            dataRequirements: { type: "single", minSamples: 2 },
+          },
+          {
+            id: "range-iqr",
+            title: { en: "Range, IQR", fa: "دامنه، دامنه بین چارکی" },
+            dataRequirements: { type: "single", minSamples: 2 },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "hypothesis",
+    title: { en: "Hypothesis Testing", fa: "آزمون فرضیه" },
+    subcategories: [
+      {
+        id: "t-tests",
+        title: { en: "T-Tests", fa: "آزمون‌های t" },
+        tests: [
+          {
+            id: "one-sample-t",
+            title: { en: "One Sample T-Test", fa: "آزمون t تک نمونه‌ای" },
+            dataRequirements: { type: "single", minSamples: 30 },
+          },
+          {
+            id: "paired-t",
+            title: { en: "Paired T-Test", fa: "آزمون t زوجی" },
+            dataRequirements: { type: "paired", minSamples: 30 },
+          },
+          // اضافه شده: آزمون t دو نمونه مستقل
+          {
+            id: "independent-t",
+            title: { en: "Independent T-Test", fa: "آزمون t دو نمونه مستقل" },
+            dataRequirements: { type: "two-independent", minSamples: 30 },
+          },
+        ],
+      },
+      {
+        id: "z-tests",
+        title: { en: "Z-Tests", fa: "آزمون‌های z" },
+        tests: [
+          {
+            id: "one-proportion-z",
+            title: { en: "One Proportion Z-Test", fa: "آزمون z تک نسبتی" },
+            dataRequirements: { type: "single", minSamples: 50 },
+          },
+          // اضافه شده: آزمون z برای میانگین
+          {
+            id: "one-mean-z",
+            title: { en: "One Mean Z-Test", fa: "آزمون z تک میانگین" },
+            dataRequirements: { type: "single", minSamples: 50 },
+          },
+        ],
+      },
+      // اضافه شده: ANOVA
+      {
+        id: "anova",
+        title: { en: "ANOVA", fa: "آنالیز واریانس" },
+        tests: [
+          {
+            id: "one-way-anova",
+            title: { en: "One-Way ANOVA", fa: "آنوا یک طرفه" },
+            dataRequirements: { type: "multi-group", minSamples: 30 },
+          },
+        ],
+      },
+      // اضافه شده: آزمون‌های نرمالیتی
+      {
+        id: "normality",
+        title: { en: "Normality Tests", fa: "آزمون‌های نرمالیتی" },
+        tests: [
+          {
+            id: "shapiro-wilk",
+            title: { en: "Shapiro-Wilk", fa: "شاپیرو-ویلک" },
+            dataRequirements: { type: "single", minSamples: 3 },
+          },
+          {
+            id: "kolmogorov-smirnov",
+            title: { en: "Kolmogorov-Smirnov", fa: "کولموگوروف-اسمیرنوف" },
+            dataRequirements: { type: "single", minSamples: 5 },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "regression",
+    title: { en: "Regression", fa: "رگرسیون" },
+    subcategories: [
+      {
+        id: "linear",
+        title: { en: "Linear Regression", fa: "رگرسیون خطی" },
+        tests: [
+          {
+            id: "simple-linear",
+            title: { en: "Simple Linear", fa: "رگرسیون ساده" },
+            dataRequirements: { type: "paired", minSamples: 30 },
+          },
+          // اضافه شده: رگرسیون چندگانه
+          {
+            id: "multiple-linear",
+            title: { en: "Multiple Linear", fa: "رگرسیون چندگانه" },
+            dataRequirements: { type: "multi-variable", minSamples: 50 },
+          },
+        ],
+      },
+      // اضافه شده: رگرسیون غیرخطی
+      {
+        id: "nonlinear",
+        title: { en: "Nonlinear Regression", fa: "رگرسیون غیرخطی" },
+        tests: [
+          {
+            id: "logistic-reg",
+            title: { en: "Logistic Regression", fa: "رگرسیون لجستیک" },
+            dataRequirements: { type: "categorical", minSamples: 100 },
+          },
+        ],
+      },
+    ],
+  },
+  // اضافه شده: آزمون‌های ناپارامتریک
+  {
+    id: "nonparametric",
+    title: { en: "Nonparametric Tests", fa: "آزمون‌های ناپارامتریک" },
+    subcategories: [
+      {
+        id: "mann-whitney",
+        title: { en: "Mann-Whitney U", fa: "من-ویتنی" },
+        tests: [
+          {
+            id: "mann-whitney",
+            title: { en: "Mann-Whitney U Test", fa: "آزمون من-ویتنی" },
+            dataRequirements: { type: "two-independent", minSamples: 20 },
+          },
+        ],
+      },
+      {
+        id: "kruskal-wallis",
+        title: { en: "Kruskal-Wallis", fa: "کروسکال-والیس" },
+        tests: [
+          {
+            id: "kruskal-wallis",
+            title: { en: "Kruskal-Wallis Test", fa: "آزمون کروسکال-والیس" },
+            dataRequirements: { type: "multi-group", minSamples: 20 },
+          },
+        ],
+      },
+    ],
+  },
+  // اضافه شده: آزمون‌های همبستگی
+  {
+    id: "correlation",
+    title: { en: "Correlation Analysis", fa: "تحلیل همبستگی" },
+    subcategories: [
+      {
+        id: "pearson",
+        title: { en: "Pearson Correlation", fa: "همبستگی پیرسون" },
+        tests: [
+          {
+            id: "pearson",
+            title: { en: "Pearson's r", fa: "ضریب پیرسون" },
+            dataRequirements: { type: "paired", minSamples: 30 },
+          },
+        ],
+      },
+      {
+        id: "spearman",
+        title: { en: "Spearman Correlation", fa: "همبستگی اسپیرمن" },
+        tests: [
+          {
+            id: "spearman",
+            title: { en: "Spearman's rho", fa: "ضریب اسپیرمن" },
+            dataRequirements: { type: "paired", minSamples: 20 },
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export const basicStatiscalContent = {
   en: {
