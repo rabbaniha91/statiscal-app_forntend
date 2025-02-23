@@ -13,14 +13,14 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { Check, Eraser, Home, Info, Plus, Table2, Upload, X } from "lucide-react";
+import { Check, Eraser, Home, Info, Plus, Table2, TextCursorInput, Upload, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { statisticalTests } from "@/data";
 import { Tests } from "@/types";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "../ui/dialog";
-import { DialogClose, DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 
 // Types
 interface DataPoint {
@@ -42,10 +42,13 @@ interface DataGroup {
 
 interface FormattedData {
   type: Tests;
-  data: number[] | { [key: string]: number[] };
+  test: string;
+  dataType: "continuous" | "discrete" | null;
+  data: number[] | { [key: string]: number[] } | null;
+  file: File | null;
 }
 
-const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: string) => void }) => {
+const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any) => void }) => {
   const { language } = useLanguage();
   const index = language === "fa" ? "fa" : "en";
   const navigate = useNavigate();
@@ -60,6 +63,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isSetUserInputGroup, setIsUserInputGroup] = useState(false);
+  const [dataType, setDataType] = useState<("continuous" | "discrete") | null>(null);
   const [disabledRun, setDisabledRun] = useState(true);
 
   // Get current test requirements and info
@@ -133,7 +137,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
   // Handle file upload
   const handleFileUpload = useCallback(
     (file: File) => {
-      const requirements = getTestRequirements();
+      // const requirements = getTestRequirements();
       const allowedTypes = new Set([".csv", ".xlsx", ".xls"]);
       const fileExtension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
 
@@ -149,14 +153,15 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
   );
 
   // Format data for submission
-  const formatDataForSubmission = useCallback((): FormattedData => {
+  const formatDataForSubmission = useCallback(() => {
     const requirements = getTestRequirements();
-    let formattedData: FormattedData;
+    let formattedData = new FormData();
 
+    formattedData.append("dataType", dataType === "continuous" ? "continuous" : "discrete");
+    formattedData.append("test", selectedTest);
+    formattedData.append("type", requirements.type);
     if (uploadedFile) {
-      const formData = new FormData() as any;
-      formData.append("file", uploadedFile);
-      return { type: requirements.type, data: formData };
+      formattedData.append("file", uploadedFile);
     }
 
     switch (requirements.type) {
@@ -167,7 +172,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
         dataGroups.forEach((group, key) => {
           groupedData[key] = group.data.map((d) => parseFloat(d.value)).filter((v) => !isNaN(v));
         });
-        formattedData = { type: requirements.type, data: groupedData };
+        formattedData.append("data", JSON.stringify(groupedData));
         break;
       }
       default: {
@@ -176,7 +181,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
             .get("main")
             ?.data.map((d) => parseFloat(d.value))
             .filter((v) => !isNaN(v)) || [];
-        formattedData = { type: "single", data: singleData };
+        formattedData.append("data", JSON.stringify(singleData));
       }
     }
 
@@ -375,8 +380,22 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
         </div>
 
         {/* Test Selection */}
-        <div className=" flex items-center gap-4">
-          <div className="grid grid-cols-3 gap-4 w-[95%]">
+        <div className=" flex flex-col gap-4">
+          <div className="grid grid-cols-4 gap-4 w-[95%]">
+            <Select
+              value={dataType === "continuous" ? "continuous" : dataType === "discrete" ? "discrete" : ""}
+              onValueChange={(v: "continuous" | "discrete") => {
+                setDataType(v);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={language === "en" ? "Select Data Type" : "انتخاب نوع داده"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="continuous">{language === "en" ? "Continuous" : "پیوسته"}</SelectItem>
+                <SelectItem value="discrete">{language === "en" ? "Discrete" : "گسسته"}</SelectItem>
+              </SelectContent>
+            </Select>
             <Select
               value={selectedCategory}
               onValueChange={(v) => {
@@ -385,6 +404,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
                 setSelectedTest("");
                 resetState();
               }}
+              disabled={!dataType}
             >
               <SelectTrigger>
                 <SelectValue placeholder={language === "en" ? "Select Category" : "انتخاب دسته"} />
@@ -453,59 +473,56 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
               </SelectContent>
             </Select>
           </div>
-          <Button
-            variant={"default"}
-            size={"lg"}
-            onClick={() => {
-              initializeDataGroups(getTestRequirements());
-            }}
-          >
-            {language === "fa" ? "تائید" : "Ok"}
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                initializeDataGroups(getTestRequirements());
+              }}
+              disabled={!selectedTest}
+            >
+              <TextCursorInput className="h-4 w-4" />
+              {language === "fa" ? "ورود دستی" : "Manual Data"}
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => fileRef.current?.click()}
+              disabled={!selectedTest}
+            >
+              {!uploadedFile ? <Upload className="h-4 w-4" /> : <Check className="h-4 w-4" />}
+              {uploadedFile ? (language === "en" ? "File Selected" : "فایل انتخاب شد") : language === "en" ? "Upload File" : "آپلود فایل"}
+            </Button>
+            {uploadedFile && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setUploadedFile(null);
+                  if (fileRef.current) fileRef.current.value = "";
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+            <div className="">
+              {/* File requirements info */}
+              {selectedTest && !uploadedFile && (
+                <div className=" text-sm text-muted-foreground">
+                  <p className="flex items-center gap-2">
+                    <Info className="h-4 w-4" />
+                    {language === "en"
+                      ? "Supported file formats: CSV, Excel (.xlsx, .xls)"
+                      : "فرمت‌های فایل پشتیبانی شده: CSV، اکسل (.xlsx, .xls)"}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Data Input Area */}
-        <ScrollArea className="flex-1 border rounded-lg p-4">
-          <div className="space-y-4">
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                className="gap-2"
-                onClick={() => fileRef.current?.click()}
-                disabled={!selectedTest}
-              >
-                {!uploadedFile ? <Upload className="h-4 w-4" /> : <Check className="h-4 w-4" />}
-                {uploadedFile ? (language === "en" ? "File Selected" : "فایل انتخاب شد") : language === "en" ? "Upload File" : "آپلود فایل"}
-              </Button>
-              {uploadedFile && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setUploadedFile(null);
-                    if (fileRef.current) fileRef.current.value = "";
-                  }}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-
-            {!uploadedFile && renderDataInputGroups()}
-
-            {/* File requirements info */}
-            {selectedTest && !uploadedFile && (
-              <div className="mt-4 text-sm text-muted-foreground">
-                <p className="flex items-center gap-2">
-                  <Info className="h-4 w-4" />
-                  {language === "en"
-                    ? "Supported file formats: CSV, Excel (.xlsx, .xls)"
-                    : "فرمت‌های فایل پشتیبانی شده: CSV، اکسل (.xlsx, .xls)"}
-                </p>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
+        <ScrollArea className="flex-1 border rounded-lg p-4">{!uploadedFile && renderDataInputGroups()}</ScrollArea>
 
         {/* Footer Actions */}
         <div className="flex justify-between items-center">
@@ -524,7 +541,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any, test: 
             size="lg"
             onClick={() => {
               const formattedData = formatDataForSubmission();
-              onDataSubmit(formattedData, selectedTest);
+              dataType && onDataSubmit(formattedData);
             }}
             disabled={disabledRun || !selectedTest}
           >

@@ -36,11 +36,15 @@ export interface BasicAnalyze {
   min: number;
   max: number;
   skewness: number;
+  range: number;
+  interquartileRange: number;
+  kurtosis: number;
 }
 
 export interface AnalyzeData {
   ferquency: [{ x: number; count: number }] | null;
   density: [{ x: number; value: number }] | null;
+  normalData: [{ x: number; value: number }] | null;
   rowData: number[] | null;
   dataType: "discrete" | "continuous";
   basicAnalyze: BasicAnalyze | null;

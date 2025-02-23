@@ -205,30 +205,13 @@ export const statisticalTests: AnalysisCategory[] = [
     title: { en: "Descriptive Analysis", fa: "تحلیل توصیفی" },
     subcategories: [
       {
-        id: "central-tendency",
-        title: { en: "Central Tendency", fa: "شاخص‌های مرکزی" },
+        id: "Central and dispersion indices",
+        title: { en: "Central and dispersion indices", fa: "شاخص‌های مرکزی و پراکندگی" },
         tests: [
           {
-            id: "mean-median-mode",
-            title: { en: "Mean, Median, Mode", fa: "میانگین، میانه، مد" },
+            id: "central-dispersion",
+            title: { en: "Mean, Variance, ...", fa: "میانگین، واریانس و ..." },
             dataRequirements: { type: "single", minSamples: 1 },
-          },
-        ],
-      },
-      // اضافه شده: شاخص‌های پراکندگی
-      {
-        id: "dispersion",
-        title: { en: "Dispersion Measures", fa: "شاخص‌های پراکندگی" },
-        tests: [
-          {
-            id: "variance-std",
-            title: { en: "Variance, Standard Deviation", fa: "واریانس، انحراف معیار" },
-            dataRequirements: { type: "single", minSamples: 2 },
-          },
-          {
-            id: "range-iqr",
-            title: { en: "Range, IQR", fa: "دامنه، دامنه بین چارکی" },
-            dataRequirements: { type: "single", minSamples: 2 },
           },
         ],
       },
@@ -435,6 +418,9 @@ export const basicStatiscalContent = {
       min: "Minimum",
       max: "Maximum",
       skewness: "Skewness",
+      range: "range",
+      interquartileRange: "interquartileRange",
+      kurtosis: "kurtosis",
     },
     plots: {
       title: "Data Visualization",
@@ -446,6 +432,7 @@ export const basicStatiscalContent = {
       densityDescription: "Description about density",
       discreteWarning: "Discrete Warning",
       continuousWarning: "Continuous Warning",
+      normal: "Normal distribution",
       density: "Density",
       frequency: "Frequency",
       value: "Value",
@@ -483,6 +470,9 @@ export const basicStatiscalContent = {
       min: "حداقل",
       max: "حداکثر",
       skewness: "چولگی",
+      range: "دامنه",
+      interquartileRange: "محدوده ی بین چارکی",
+      kurtosis: "کشیدگی",
     },
     plots: {
       title: "تجسم داده",
@@ -495,6 +485,7 @@ export const basicStatiscalContent = {
       discreteWarning: "هشدارهای داده های گسسته",
       continuousWarning: "هشدارهای داده های پیوسته",
       density: "Density",
+      normal: "توزیع نرمال",
       frequency: "Frequency",
       value: "Value",
       index: "Count",

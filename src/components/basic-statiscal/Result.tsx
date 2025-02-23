@@ -23,6 +23,9 @@ const ResultsComponent = () => {
     { key: "min", label: t.min },
     { key: "max", label: t.max },
     { key: "skewness", label: t.skewness },
+    { key: "range", label: t.range },
+    { key: "interquartileRange", label: t.interquartileRange },
+    { key: "kurtosis", label: t.kurtosis },
   ];
 
   return (

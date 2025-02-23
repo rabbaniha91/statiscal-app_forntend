@@ -13,5 +13,5 @@ export const login = async (data: Login, signal: AbortSignal) => {
 // ------------------------calcs apis-----------------------------------
 
 export const callBasicCalsApi = async (data: any, signal: AbortSignal) => {
-  return (await axios.post("/statistic/calc-basic", data, { signal })).data;
+  return (await axios.post("/statistic/descriptive-analysis", data, { signal })).data;
 };

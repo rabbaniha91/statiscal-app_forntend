@@ -36,23 +36,23 @@ const StatisticalAnalysis = () => {
     const controller = new AbortController();
     const { signal } = controller;
     analyzeDispatch({ type: "RECIVE_DATA" });
-    console.log("Data: ", data);
     try {
-      // const { results } = await callBasicCalsApi(data, signal);
-      // analyzeDispatch({
-      //   type: "SET_DATA",
-      //   payload: {
-      //     basicAnalyze: results.basicAnalyze,
-      //     dataType: results.dataType,
-      //     density: results.density,
-      //     ferquency: results.ferquency,
-      //     rowData: results.rowData,
-      //   },
-      // });
+      const { results } = await callBasicCalsApi(data, signal);
+      analyzeDispatch({
+        type: "SET_DATA",
+        payload: {
+          basicAnalyze: results.basicAnalyze,
+          dataType: results.dataType,
+          density: results.density,
+          ferquency: results.frequency,
+          rowData: results.rowData,
+          normalData: results.normalData,
+        },
+      });
 
       toast({ variant: "success", description: "Success" });
-      // setOpenDrawer(true);
-      // setIsMinimized(false);
+      setOpenDrawer(true);
+      setIsMinimized(false);
     } catch (error: any) {
       const errorMsg = error?.response?.data?.message ? error?.response?.data?.message : error?.message;
       toast({ variant: "destructive", description: errorMsg });

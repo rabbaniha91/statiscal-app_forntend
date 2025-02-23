@@ -1,5 +1,5 @@
 import { AnalyzeData, AnalyzeAction } from "@/types";
-import { createContext, ReactNode, useReducer, Dispatch, useContext, useEffect } from "react";
+import { createContext, ReactNode, useReducer, Dispatch, useContext } from "react";
 
 const initialState: AnalyzeData = {
   ferquency: null,
@@ -7,6 +7,7 @@ const initialState: AnalyzeData = {
   rowData: null,
   dataType: "continuous",
   basicAnalyze: null,
+  normalData: null,
   loading: false,
 };
 
@@ -34,6 +35,7 @@ const reducer = (state: AnalyzeData, action: AnalyzeAction): AnalyzeData => {
         density: action.payload?.density,
         ferquency: action.payload?.ferquency,
         rowData: action.payload.rowData,
+        normalData: action.payload.normalData,
       };
     case "RESET_DATA":
       return initialState;
