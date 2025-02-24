@@ -129,7 +129,7 @@ const StatisticalAnalysis = () => {
                   value="charts"
                   className="mt-4 animate-fade"
                 >
-                  {analyzeState.density && <PlotsComponent />}
+                  {analyzeState.ferquency && <PlotsComponent />}
                 </TabsContent>
               </SheetDescription>
             </SheetContent>

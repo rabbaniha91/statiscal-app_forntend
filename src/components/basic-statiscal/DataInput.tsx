@@ -234,7 +234,7 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any) => voi
         open={isInfoModalOpen}
         onOpenChange={setIsInfoModalOpen}
       >
-        <AlertDialogContent>
+        <AlertDialogContent dir={language === "fa" ? "rtl" : "ltr"}>
           <AlertDialogHeader>
             <AlertDialogTitle>{test.title[index]}</AlertDialogTitle>
             <AlertDialogDescription className="space-y-2">
@@ -496,13 +496,14 @@ const DataInputComponent = ({ onDataSubmit }: { onDataSubmit: (data: any) => voi
             {uploadedFile && (
               <Button
                 variant="ghost"
-                size="icon"
                 onClick={() => {
                   setUploadedFile(null);
                   if (fileRef.current) fileRef.current.value = "";
                 }}
+                className=" group"
               >
-                <X className="h-4 w-4" />
+                {uploadedFile.name}
+                <X className="h-4 w-4 group-hover:text-red-500 transition-colors " />
               </Button>
             )}
             <div className="">

@@ -1,5 +1,5 @@
 import { AnalyzeData, AnalyzeAction } from "@/types";
-import { createContext, ReactNode, useReducer, Dispatch, useContext } from "react";
+import { createContext, ReactNode, useReducer, Dispatch, useContext, useEffect } from "react";
 
 const initialState: AnalyzeData = {
   ferquency: null,
@@ -46,6 +46,10 @@ const reducer = (state: AnalyzeData, action: AnalyzeAction): AnalyzeData => {
 
 const AnalyzeProvider = ({ children }: { children: ReactNode }) => {
   const [analyzeState, analyzeDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    console.log("analyzeState: ", analyzeState);
+  }, [analyzeState]);
 
   return <analyzeContext.Provider value={{ analyzeState, analyzeDispatch }}>{children}</analyzeContext.Provider>;
 };

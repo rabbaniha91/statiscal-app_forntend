@@ -15,7 +15,7 @@ const PlotsComponent = () => {
   const dataType = useMemo(() => analyzeState.dataType, [analyzeState.dataType]);
   const processedData = useMemo(() => analyzeState.ferquency, [analyzeState.ferquency, dataType]);
   const normalDistribution = useMemo(() => analyzeState.normalData, [analyzeState.normalData]);
-  const density = useMemo(() => analyzeState.density, [analyzeState.density]);
+  // const density = useMemo(() => analyzeState.density, [analyzeState.density]);
 
   const renderHistogram = () => (
     <ResponsiveContainer
@@ -73,35 +73,35 @@ const PlotsComponent = () => {
       </LineChart>
     </ResponsiveContainer>
   );
-  const renderDensityPlot = () => (
-    <ResponsiveContainer
-      width="100%"
-      height={400}
-    >
-      <LineChart data={density ? density : []}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="x"
-          tickFormatter={(value) => {
-            return value.toFixed(2);
-          }}
-          tickMargin={10}
-        />
-        <YAxis />
-        <Tooltip
-          formatter={(value: number) => [value.toExponential(2), t.density]}
-          labelFormatter={(label) => `${t.value}: ${label.toFixed(2)}`}
-        />
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke="#ff7300"
-          strokeWidth={2}
-          dot={false}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  );
+  // const renderDensityPlot = () => (
+  //   <ResponsiveContainer
+  //     width="100%"
+  //     height={400}
+  //   >
+  //     <LineChart data={density ? density : []}>
+  //       <CartesianGrid strokeDasharray="3 3" />
+  //       <XAxis
+  //         dataKey="x"
+  //         tickFormatter={(value) => {
+  //           return value.toFixed(2);
+  //         }}
+  //         tickMargin={10}
+  //       />
+  //       <YAxis />
+  //       <Tooltip
+  //         formatter={(value: number) => [value.toExponential(2), t.density]}
+  //         labelFormatter={(label) => `${t.value}: ${label.toFixed(2)}`}
+  //       />
+  //       <Line
+  //         type="monotone"
+  //         dataKey="value"
+  //         stroke="#ff7300"
+  //         strokeWidth={2}
+  //         dot={false}
+  //       />
+  //     </LineChart>
+  //   </ResponsiveContainer>
+  // );
 
   return (
     <Card className="text-center bg-inherit mx-auto max-w-7xl shadow-none">
@@ -112,11 +112,11 @@ const PlotsComponent = () => {
         <Tabs defaultValue="histogram">
           <TabsList>
             <TabsTrigger value="histogram">{t.histogram}</TabsTrigger>
-            <TabsTrigger value="density">{t.density}</TabsTrigger>
+            {/* <TabsTrigger value="density">{t.density}</TabsTrigger> */}
             <TabsTrigger value="normal">{t.normal}</TabsTrigger>
           </TabsList>
           <TabsContent value="histogram">{renderHistogram()}</TabsContent>
-          <TabsContent value="density">{renderDensityPlot()}</TabsContent>
+          {/* <TabsContent value="density">{renderDensityPlot()}</TabsContent> */}
           <TabsContent value="normal">{renderNormalPlot()}</TabsContent>
         </Tabs>
       </CardContent>
